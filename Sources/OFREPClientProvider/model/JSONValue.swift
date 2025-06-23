@@ -82,7 +82,7 @@ public enum JSONValue: Codable, Equatable {
         return nil
     }
 
-    public func asObject() -> [String:JSONValue]? {
+    public func asObject() -> [String: JSONValue]? {
         if case .object(let value) = self {
             return value
         }

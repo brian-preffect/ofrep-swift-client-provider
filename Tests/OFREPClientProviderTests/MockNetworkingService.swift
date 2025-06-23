@@ -22,14 +22,13 @@ public class MockNetworkingService: NetworkingService {
         guard let jsonDictionary = try JSONSerialization.jsonObject(with: request.httpBody!, options: []) as? [String: Any] else {
             throw OpenFeatureError.invalidContextError
         }
-        guard let targetingKey = ((jsonDictionary["context"] as! [String:Any])["targetingKey"] as? String) else {
+        guard let targetingKey = ((jsonDictionary["context"] as! [String: Any])["targetingKey"] as? String) else {
             throw OpenFeatureError.targetingKeyMissingError
         }
 
-
         var data = mockData ?? Data()
-        var headers: [String: String]? = nil
-        if mockStatus == 429 || (targetingKey == "429" && callCounter >= 2){
+        var headers: [String: String]?
+        if mockStatus == 429 || (targetingKey == "429" && callCounter >= 2) {
             headers = ["Retry-After": "120"]
             mockStatus = 429
             let response = HTTPURLResponse(url: request.url!, statusCode: mockStatus, httpVersion: nil, headerFields: headers)!
@@ -41,7 +40,7 @@ public class MockNetworkingService: NetworkingService {
             headers = ["ETag": "33a64df551425fcc55e4d42a148795d9f25f89d4"]
         }
 
-        if targetingKey == "second-context" || (targetingKey == "test-change-config" && callCounter >= 3){
+        if targetingKey == "second-context" || (targetingKey == "test-change-config" && callCounter >= 3) {
             headers = ["ETag": "differentEtag33a64df551425fcc55e"]
             data = secondResponse.data(using: .utf8)!
             let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: headers)!

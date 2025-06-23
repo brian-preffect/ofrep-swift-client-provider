@@ -14,7 +14,7 @@ class OfrepApiTests: XCTestCase {
         defaultEvaluationContext.add(key: "name", value: Value.string("John Doe"))
         defaultEvaluationContext.add(key: "age", value: Value.integer(2))
         defaultEvaluationContext.add(key: "category", value: Value.double(2.2))
-        defaultEvaluationContext.add(key: "struct", value: Value.structure(["test" : Value.string("test")]))
+        defaultEvaluationContext.add(key: "struct", value: Value.structure(["test": Value.string("test")]))
         defaultEvaluationContext.add(key: "list", value: Value.list([Value.string("test1"), Value.string("test2")]))
     }
     override func tearDown() {
@@ -22,7 +22,7 @@ class OfrepApiTests: XCTestCase {
         super.tearDown()
     }
 
-    func testShouldReturnAValidEvaluationResponse() async throws{
+    func testShouldReturnAValidEvaluationResponse() async throws {
         let mockResponse = """
             {
               "flags": [
@@ -51,8 +51,8 @@ class OfrepApiTests: XCTestCase {
               ]
             }
         """
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8))
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8))
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
 
         do {
             let (evalResp, response) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
@@ -90,10 +90,10 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowAnUnauthorizedError() async throws{
+    func testShouldThrowAnUnauthorizedError() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 401)
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 401)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -101,7 +101,6 @@ class OfrepApiTests: XCTestCase {
             switch error {
             case .apiUnauthorizedError(let response):
                 XCTAssertNotNil(response)
-                break
             default:
                 XCTFail("Caught an unexpected OFREP error type: \(error)")
             }
@@ -110,11 +109,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowAForbiddenError() async throws{
+    func testShouldThrowAForbiddenError() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 403)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 403)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -122,7 +121,6 @@ class OfrepApiTests: XCTestCase {
             switch error {
             case .forbiddenError(let response):
                 XCTAssertNotNil(response)
-                break
             default:
                 XCTFail("Caught an unexpected OFREP error type: \(error)")
             }
@@ -131,11 +129,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowTooManyRequest() async throws{
+    func testShouldThrowTooManyRequest() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 429)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 429)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -144,7 +142,6 @@ class OfrepApiTests: XCTestCase {
             case .apiTooManyRequestsError(let response):
                 XCTAssertNotNil(response)
                 XCTAssertEqual(response.allHeaderFields["Retry-After"] as! String, "120")
-                break
             default:
                 XCTFail("Caught an unexpected OFREP error type: \(error)")
             }
@@ -153,11 +150,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowUnexpectedError() async throws{
+    func testShouldThrowUnexpectedError() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 500)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 500)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -165,7 +162,6 @@ class OfrepApiTests: XCTestCase {
             switch error {
             case .unexpectedResponseError(let response):
                 XCTAssertNotNil(response)
-                break
             default:
                 XCTFail("Caught an unexpected OFREP error type: \(error)")
             }
@@ -174,13 +170,13 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldReturnaEvaluationResponseInError() async throws{
+    func testShouldReturnaEvaluationResponseInError() async throws {
         let mockResponse = """
 {"errorCode": "INVALID_CONTEXT", "errorDetails":"explanation of the error"}
 """
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 400)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 400)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             let (evalResp, httpResp) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTAssertTrue(evalResp.isError())
@@ -192,11 +188,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldReturnaEvaluationResponseIfWeReceiveA304() async throws{
+    func testShouldReturnaEvaluationResponseIfWeReceiveA304() async throws {
         let mockResponse = ""
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 304)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 304)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             let (evalResp, httpResp) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTAssertFalse(evalResp.isError())
@@ -206,11 +202,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowInvalidContextWithNilContext() async throws{
+    func testShouldThrowInvalidContextWithNilContext() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 500)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 500)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: nil)
             XCTFail("Should throw an exception")
@@ -226,11 +222,11 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowTargetingKeyMissingErrorWithNoTargetingKey() async throws{
+    func testShouldThrowTargetingKeyMissingErrorWithNoTargetingKey() async throws {
         let mockResponse = "{}"
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 200)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 200)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             let ctx = MutableContext()
             ctx.add(key: "email", value: Value.string("john.doe@gofeatureflag.org"))
@@ -248,7 +244,7 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowUnmarshallErrorWithInvalidJson() async throws{
+    func testShouldThrowUnmarshallErrorWithInvalidJson() async throws {
         let mockResponse = """
             {
               "flags": [
@@ -261,9 +257,9 @@ class OfrepApiTests: XCTestCase {
                 }
             }
         """
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 200)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 200)
 
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -279,7 +275,7 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldThrowWithInvalidOptions() async throws{
+    func testShouldThrowWithInvalidOptions() async throws {
         let mockResponse = """
         {
             "flags": [
@@ -292,9 +288,9 @@ class OfrepApiTests: XCTestCase {
             ]
         }
         """
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 200)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 200)
         let testOptions = OfrepProviderOptions(endpoint: "")
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:testOptions)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: testOptions)
         do {
             _ = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTFail("Should throw an exception")
@@ -305,7 +301,7 @@ class OfrepApiTests: XCTestCase {
         }
     }
 
-    func testShouldETagShouldNotMatch() async throws{
+    func testShouldETagShouldNotMatch() async throws {
         let mockResponse = """
         {
             "flags": [
@@ -318,12 +314,12 @@ class OfrepApiTests: XCTestCase {
             ]
         }
         """
-        let mockService = MockNetworkingService(mockData:  mockResponse.data(using: .utf8), mockStatus: 200)
-        let ofrepAPI = OfrepAPI(networkingService: mockService, options:options)
+        let mockService = MockNetworkingService(mockData: mockResponse.data(using: .utf8), mockStatus: 200)
+        let ofrepAPI = OfrepAPI(networkingService: mockService, options: options)
         do {
             let (_, httpResp) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTAssertNotNil(httpResp.value(forHTTPHeaderField: "ETag"))
-            
+
             let (_, httpResp2) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTAssertEqual(httpResp2.statusCode, 304)
 

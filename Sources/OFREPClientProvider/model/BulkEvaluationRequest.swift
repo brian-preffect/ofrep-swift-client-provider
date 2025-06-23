@@ -32,8 +32,8 @@ struct BulkEvaluationRequest {
 
     static func convertEvaluationContext(context: EvaluationContext) -> BulkEvaluationRequest {
         var requestBody = BulkEvaluationRequest()
-        requestBody.setTargetingKey(targetingKey:context.getTargetingKey())
-        requestBody.addContext(toAdd:context.asObjectMap())
+        requestBody.setTargetingKey(targetingKey: context.getTargetingKey())
+        requestBody.addContext(toAdd: context.asObjectMap())
         return requestBody
     }
 }

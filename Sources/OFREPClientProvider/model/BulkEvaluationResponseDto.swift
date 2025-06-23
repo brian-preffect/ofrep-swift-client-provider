@@ -13,7 +13,7 @@ struct EvaluationResponseFlagDTO: Codable {
     let variant: String?
     let errorCode: String?
     let errorDetails: String?
-    let metadata: [String:FlagMetadataValueDto]?
+    let metadata: [String: FlagMetadataValueDto]?
 }
 
 enum FlagMetadataValueDto: Codable {
@@ -143,7 +143,7 @@ struct OfrepEvaluationResponseFlag {
     let variant: String?
     let errorCode: ErrorCode?
     let errorDetails: String?
-    let flagMetadata: [String:FlagMetadataValue]?
+    let flagMetadata: [String: FlagMetadataValue]?
 
     func isError() -> Bool {
         return errorCode != nil

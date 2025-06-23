@@ -32,7 +32,7 @@ public class OfrepClientProvider: FeatureProvider {
     public func observe() -> AnyPublisher<OpenFeature.ProviderEvent?, Never> {
             return eventHandler.observe()
     }
-    
+
     public func initialize(initialContext: (any OpenFeature.EvaluationContext)?) async throws {
         self.evaluationContext = initialContext
         do {
@@ -44,7 +44,7 @@ public class OfrepClientProvider: FeatureProvider {
             if status == .successWithChanges {
                 return
             }
-            
+
             throw OpenFeatureError.generalError(message: "impossible to initialize the provider, receive unknown status")
         } catch {
             switch error {
@@ -61,7 +61,7 @@ public class OfrepClientProvider: FeatureProvider {
         self.evaluationContext = newContext
         do {
             let status = try await self.evaluateFlags(context: newContext)
-            if(status == .successWithChanges || status == .successNoChanges ) {
+            if status == .successWithChanges || status == .successNoChanges {
                 return
             }
         } catch let error as OfrepError {
@@ -140,7 +140,7 @@ public class OfrepClientProvider: FeatureProvider {
         }
 
         if objValue != nil {
-            var convertedValue: [String:Value] = [:]
+            var convertedValue: [String: Value] = [:]
             objValue?.forEach { key, value in
                 convertedValue[key]=value.toValue()
             }
@@ -222,7 +222,7 @@ public class OfrepClientProvider: FeatureProvider {
                 }
             }
 
-            var inMemoryCacheNew: [String:OfrepEvaluationResponseFlag] = [:]
+            var inMemoryCacheNew: [String: OfrepEvaluationResponseFlag] = [:]
             for flag in ofrepEvalResponse.flags {
                 if let key = flag.key {
                     inMemoryCacheNew[key] = flag
