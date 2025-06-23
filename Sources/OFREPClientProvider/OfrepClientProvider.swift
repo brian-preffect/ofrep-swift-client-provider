@@ -126,7 +126,6 @@ public class OfrepClientProvider: FeatureProvider {
             flagMetadata: flagCached.flagMetadata ?? [:],
             variant: flagCached.variant,
             reason: flagCached.reason)
-
     }
 
     public func getObjectEvaluation(key: String, defaultValue: Value,
@@ -142,7 +141,7 @@ public class OfrepClientProvider: FeatureProvider {
         if objValue != nil {
             var convertedValue: [String: Value] = [:]
             objValue?.forEach { key, value in
-                convertedValue[key]=value.toValue()
+                convertedValue[key] = value.toValue()
             }
 
             return ProviderEvaluation<Value>(

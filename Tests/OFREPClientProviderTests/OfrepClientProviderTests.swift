@@ -333,7 +333,6 @@ class ProviderTests: XCTestCase {
             default:
                 break
             }
-
         }.store(in: &cancellables)
         api.setEvaluationContext(evaluationContext: newContext)
         await fulfillment(of: [expectation1, expectation2], timeout: 5)
@@ -512,7 +511,6 @@ class ProviderTests: XCTestCase {
         XCTAssertEqual(details.flagMetadata["additionalProp2"], FlagMetadataValue.string("value"))
         XCTAssertEqual(details.flagMetadata["additionalProp1"], FlagMetadataValue.boolean(true))
         XCTAssertEqual(details.flagMetadata["additionalProp3"], FlagMetadataValue.integer(123))
-
     }
 
     func testShouldReturnAValidEvaluationForDouble() async {

@@ -9,13 +9,13 @@ let package = Package(
         .iOS(.v14),
         .tvOS(.v14),
         .macOS(.v12),
-        .watchOS(.v7)
+        .watchOS(.v7),
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "OFREPClientProvider",
-            targets: ["OFREPClientProvider"])
+            targets: ["OFREPClientProvider"]),
     ],
     dependencies: [
         .package(url: "https://github.com/open-feature/swift-sdk.git", from: "0.3.0")
@@ -32,6 +32,6 @@ let package = Package(
         .testTarget(
             name: "OFREPClientProviderTests",
             dependencies: ["OFREPClientProvider"]
-        )
+        ),
     ]
 )

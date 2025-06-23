@@ -91,7 +91,7 @@ struct OfrepEvaluationResponse {
                 if let metadata = flag.metadata {
                     convertedMetadata = Dictionary(uniqueKeysWithValues: metadata.map { key, value in
                         (key, value.toFlagMetadataValue())
-                    }.compactMap { (key, value) -> (String, FlagMetadataValue)? in
+                    }.compactMap { key, value -> (String, FlagMetadataValue)? in
                         guard let value = value else { return nil }
                         return (key, value)
                     })

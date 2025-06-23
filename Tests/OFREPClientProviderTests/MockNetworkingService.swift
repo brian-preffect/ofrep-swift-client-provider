@@ -18,7 +18,7 @@ public class MockNetworkingService: NetworkingService {
     }
 
     public func doRequest(for request: URLRequest) async throws -> (Data, URLResponse) {
-        callCounter+=1
+        callCounter += 1
         guard let jsonDictionary = try JSONSerialization.jsonObject(with: request.httpBody!, options: []) as? [String: Any] else {
             throw OpenFeatureError.invalidContextError
         }

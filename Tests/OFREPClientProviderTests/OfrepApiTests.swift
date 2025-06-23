@@ -322,10 +322,8 @@ class OfrepApiTests: XCTestCase {
 
             let (_, httpResp2) = try await ofrepAPI.postBulkEvaluateFlags(context: defaultEvaluationContext)
             XCTAssertEqual(httpResp2.statusCode, 304)
-
         } catch {
             XCTFail("Caught an unexpected error type: \(error)")
         }
     }
-
 }
